@@ -39,6 +39,7 @@ module Kitchen
       default_config :cap_drop, nil
       default_config :chef_image, "chef/chef"
       default_config :chef_version, "latest"
+      default_config :chef_container_prefix, nil
       default_config :data_image, "dokken/kitchen-cache:latest"
       default_config :dns, nil
       default_config :dns_search, nil
@@ -573,7 +574,12 @@ module Kitchen
       end
 
       def chef_container_name
-        "chef-#{chef_version}"
+        name = "chef-#{chef_version}"
+        if config[:chef_container_prefix]
+          name = "#{config[:chef_container_prefix]}-#{name}"
+        end
+
+        name
       end
 
       def chef_image
